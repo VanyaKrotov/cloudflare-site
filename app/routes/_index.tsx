@@ -1,25 +1,18 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
-// eslint-disable-next-line import/no-named-as-default
-import styled from "styled-components";
+import { type MetaFunction } from "@remix-run/cloudflare";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Welcome to Remix!" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
-};
-
-const MainWrapper = styled.div`
-  background-color: tomato;
-`;
-
-function Index() {
+function Landing() {
   return (
-    <MainWrapper>
-      <h1>Welcome to Remix</h1>
-      test
-    </MainWrapper>
+    <main>
+      <h1>Landing</h1>
+    </main>
   );
 }
 
-export default Index;
+export default Landing;
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Welcome to Remix example" },
+    { name: "description", content: "Welcome to Remix!" },
+  ];
+};

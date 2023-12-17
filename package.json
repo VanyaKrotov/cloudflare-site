@@ -5,14 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "remix dev --manual -c \"npm run start\"",
-    "start": "wrangler pages dev --compatibility-date=2023-06-21 ./public",
+    "start": "wrangler pages dev --compatibility-date=2023-06-21 --local-protocol=https ./public",
     "build": "remix build",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "typecheck": "tsc",
-    "pages:deploy": "npm run build && wrangler pages deploy ./public",
-    "postinstall": "remix-esbuild-override"
+    "pages:deploy": "npm run build && wrangler pages deploy ./public"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.0.1",
     "@remix-run/cloudflare": "^2.4.0",
     "@remix-run/cloudflare-pages": "^2.4.0",
     "@remix-run/css-bundle": "^2.4.0",
@@ -21,6 +21,8 @@
     "isbot": "^3.6.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^9.0.4",
+    "remix-utils": "^7.3.0",
     "styled-components": "^6.1.1"
   },
   "devDependencies": {
@@ -36,7 +38,6 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "remix-esbuild-override": "^3.1.0",
     "typescript": "^5.1.0",
     "wrangler": "3.8.0"
   },

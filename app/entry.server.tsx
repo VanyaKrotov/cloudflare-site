@@ -4,11 +4,14 @@
  * For more information, see https://remix.run/file-conventions/entry.server
  */
 
-import type { AppLoadContext, EntryContext } from "@remix-run/cloudflare";
+import { type AppLoadContext, type EntryContext } from "@remix-run/cloudflare";
 import { RemixServer } from "@remix-run/react";
+import { Provider as StoreProvider } from "react-redux";
 // import isbot from "isbot";
 import { renderToString } from "react-dom/server";
 import { ServerStyleSheet } from "styled-components";
+
+import { store } from "./store";
 
 export default async function handleRequest(
   request: Request,
@@ -21,14 +24,26 @@ export default async function handleRequest(
   loadContext: AppLoadContext
 ) {
   const sheet = new ServerStyleSheet();
-
-  let markup = renderToString(
-    sheet.collectStyles(
-      <RemixServer context={remixContext} url={request.url} />
+  let body: string = "";
+  try {
+    body = renderToString(
+      sheet.collectStyles(
+        <StoreProvider store={store}>
+          <RemixServer context={remixContext} url={request.url} />
+        </StoreProvider>
+      )
     )
-  );
-
-  markup = markup.replace("__STYLES__", sheet.getStyleTags());
+      .replace("[__STYLES__]", sheet.getStyleTags())
+      .replace(
+        "[__REDUX_STATE__]",
+        `<script type="text/javascript">window["REDUX_STATE"]=${JSON.stringify(
+          store.getState()
+        )};</script>`
+      );
+  } catch (error) {
+    console.error(error);
+    responseStatusCode = 500;
+  }
 
   // const body = await renderToReadableStream(
   //   <StyleSheetManager sheet={sheet.instance}>
@@ -50,7 +65,7 @@ export default async function handleRequest(
 
   responseHeaders.set("Content-Type", "text/html");
 
-  return new Response("<!DOCTYPE html>" + markup, {
+  return new Response("<!DOCTYPE html>" + body, {
     headers: responseHeaders,
     status: responseStatusCode,
   });
