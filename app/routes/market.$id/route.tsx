@@ -15,6 +15,9 @@ const Contacts = () => {
     <main>
       <h1>{data.name}</h1>
       <p>Description</p>
+      <button onClick={() => console.log("click")}>
+        button text <a href="/">link to landing</a>
+      </button>
     </main>
   );
 };
